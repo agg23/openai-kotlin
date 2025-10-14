@@ -8,8 +8,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class ToolCallChunk(
-    /** Tool call index. Required in the case of chat stream variant **/
-    @SerialName("index") val index: Int,
+    /** Tool call index. **/
+    @SerialName("index") val index: Int? = null,
     /** The type of the tool call. **/
     @SerialName("type") val type: String? = null,
     /** The ID of the tool call. **/

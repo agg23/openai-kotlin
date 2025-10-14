@@ -25,9 +25,9 @@ internal class ChatMessageAssembler {
                 call.nameOrNull?.let { chatFuncName.append(it) }
                 call.argumentsOrNull?.let { chatFuncArgs.append(it) }
             }
-            toolCalls?.onEach { toolCall ->
+            toolCalls?.onEachIndexed { index, toolCall ->
                 toolCall as? ToolCallChunk ?: error("Tool call is not a function")
-                val index = toolCall.index
+                val index = toolCall.index ?: index
                 val assembler = toolCallsAssemblers.getOrPut(index) { ToolCallAssembler() }
                 assembler.merge(toolCall)
             }
