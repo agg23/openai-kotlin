@@ -1,6 +1,7 @@
 import com.diffplug.gradle.spotless.SpotlessExtension
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent.*
+import org.gradle.plugins.signing.Sign
 import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
 import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
 import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
@@ -14,6 +15,16 @@ plugins {
     alias(libs.plugins.maven.publish) apply false
     alias(libs.plugins.spotless) apply false
     alias(libs.plugins.dokka)
+}
+
+val isCiBuild = System.getenv("CI")?.toBoolean() == true || System.getenv("JITPACK")?.toBoolean() == true
+
+if (isCiBuild) {
+    allprojects {
+        tasks.withType<Sign>().configureEach {
+            enabled = false
+        }
+    }
 }
 
 subprojects {

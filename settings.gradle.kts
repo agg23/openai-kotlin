@@ -10,6 +10,7 @@ include(":sample:js")
 
 val isCiBuild = System.getenv("CI")?.toBoolean() == true || System.getenv("JITPACK")?.toBoolean() == true
 if (isCiBuild) {
+    System.setProperty("org.gradle.project.RELEASE_SIGNING_ENABLED", "false")
     logger.lifecycle("Skipping :sample:native configuration for CI builds")
 } else {
     include(":sample:native")
