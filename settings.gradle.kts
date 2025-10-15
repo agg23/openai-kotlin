@@ -7,7 +7,13 @@ include(":openai-client-bom")
 
 include(":sample:jvm")
 include(":sample:js")
-include(":sample:native")
+
+val isCiBuild = System.getenv("CI")?.toBoolean() == true || System.getenv("JITPACK")?.toBoolean() == true
+if (isCiBuild) {
+    logger.lifecycle("Skipping :sample:native configuration for CI builds")
+} else {
+    include(":sample:native")
+}
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
