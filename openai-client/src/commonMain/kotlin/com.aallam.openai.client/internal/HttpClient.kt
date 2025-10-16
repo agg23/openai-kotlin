@@ -13,6 +13,7 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.client.plugins.sse.SSE
 import io.ktor.http.*
+import io.ktor.http.content.OutgoingContent
 import io.ktor.serialization.kotlinx.*
 import io.ktor.util.*
 import kotlinx.serialization.json.Json
@@ -40,6 +41,11 @@ internal fun createHttpClient(config: OpenAIConfig): HttpClient {
             val logging = config.logging
             logger = logging.logger.toKtorLogger()
             level = logging.logLevel.toKtorLogLevel()
+            filter { request ->
+                val body = request.body
+                // Ktor 3 Logging expects OutgoingContent in order to attach CallLogger.
+                body is OutgoingContent
+            }
             if (logging.sanitize) {
                 sanitizeHeader { header -> header == HttpHeaders.Authorization }
             }
